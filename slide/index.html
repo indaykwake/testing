@@ -16,24 +16,17 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f5f5f5;
+      overflow: hidden; /* Prevents scrolling */
+      background-color: black; /* Just in case there's extra space */
     }
 
     .slider-container {
       position: relative;
       width: 1600px;
+      height: 750px; /* Ensures no extra bottom space */
       max-width: 100%;
-      height: 750px; /* Fixed height to avoid extra space */
+      max-height: 100vh;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-    }
-
-    .slider {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
     }
 
     .slider img {
@@ -91,18 +84,5 @@
     let index = 0;
 
     document.getElementById("next").addEventListener("click", function () {
-      images[index].classList.remove("active");
-      index = (index + 1) % images.length;
-      images[index].classList.add("active");
-    });
-
-    document.getElementById("prev").addEventListener("click", function () {
-      images[index].classList.remove("active");
-      index = (index - 1 + images.length) % images.length;
-      images[index].classList.add("active");
-    });
-  </script>
-
-</body>
-</html>
+      images[index].c
 

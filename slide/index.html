@@ -23,9 +23,11 @@ body {
 
 .slider {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  max-width: 800px;
+  height: 450 px;
   overflow: hidden;
+  margin: auto;
 }
 
 .slide {
@@ -46,17 +48,9 @@ body {
 }
 
 
-.slide:first-child {
-  background: url("1.jpg");
-}
-
-.slide:nth-child(2) {
-  background: url("2.jpg");
-}
-
-.slide:nth-child(3) {
-  background: url("3.jpg");
-}
+.slide:first-child { background: url("1.jpg");}
+.slide:nth-child(2) { background: url("2.jpg");}
+.slide:nth-child(3) { background: url("3.jpg");}
 
 
 .buttons button#prev {

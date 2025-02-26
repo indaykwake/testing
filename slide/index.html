@@ -12,14 +12,14 @@
     }
 
     html, body {
-      height: 100%;
       width: 100%;
+      height: 100%;
       overflow: hidden;
-      background-color: black;
+      background-color: black; /* Fallback */
     }
 
     .slider-container {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
@@ -28,10 +28,15 @@
     }
 
     .slider img {
-      width: 100vw;
-      height: 100vh;
-      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      display: none;
     }
 
     .slider img.active {
@@ -106,3 +111,4 @@
 
 </body>
 </html>
+

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Fullscreen Image Slider</title>
+  <title>Fullscreen Image Slider</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,18 +11,17 @@
       padding: 0;
     }
 
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
+    html, body {
+      height: 100%;
+      width: 100%;
       overflow: hidden;
       background-color: black;
     }
 
     .slider-container {
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
@@ -32,7 +31,7 @@
       width: 100%;
       height: 100%;
       display: none;
-      object-fit: cover; /* Ensures the image fills the screen */
+      object-fit: cover;
     }
 
     .slider img.active {
@@ -64,11 +63,6 @@
 
     /* Responsive Adjustments */
     @media (max-width: 768px) {
-      .slider-container {
-        width: 100vw;
-        height: 100vh; /* Make sure the image fills the screen */
-      }
-
       .buttons button {
         padding: 10px 15px;
         font-size: 1.5rem;
@@ -112,4 +106,3 @@
 
 </body>
 </html>
-

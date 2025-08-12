@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Vertical Image Slider with Buttons</title>
+  <title>Fullscreen Vertical Image Slider with Auto-Hide Buttons</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
     html, body {
       width: 100%;
       height: 100%;
-      overflow-y: hidden; /* We'll handle scrolling manually */
+      overflow: hidden;
       background-color: black;
     }
 
@@ -38,7 +38,7 @@
       display: block;
     }
 
-    /* Buttons */
+    /* Buttons container */
     .buttons {
       position: absolute;
       left: 50%;
@@ -49,7 +49,14 @@
       flex-direction: column;
       justify-content: space-between;
       transform: translateX(-50%);
-      pointer-events: none; /* So clicks pass through except on buttons */
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Hidden state for fade-out */
+    .buttons.hidden {
+      opacity: 0;
     }
 
     .buttons button {
@@ -62,6 +69,7 @@
       font-size: 2rem;
       border-radius: 50%;
       margin: 10px auto;
+      transition: background-color 0.3s ease;
     }
 
     .buttons button:hover {
@@ -87,7 +95,7 @@
       <img src="1.5.png" alt="">
     </div>
 
-    <div class="buttons">
+    <div class="buttons" id="buttons">
       <button id="prev">&#9650;</button> <!-- Up arrow -->
       <button id="next">&#9660;</button> <!-- Down arrow -->
     </div>
@@ -96,13 +104,16 @@
   <script>
     const slider = document.getElementById("slider");
     const slides = document.querySelectorAll(".slider img");
+    const buttons = document.getElementById("buttons");
     let index = 0;
+    let hideTimeout;
 
     function showSlide(i) {
       if (i < 0) i = slides.length - 1;
       if (i >= slides.length) i = 0;
       index = i;
       slider.style.transform = `translateY(-${index * 100}vh)`;
+      resetButtonFade();
     }
 
     document.getElementById("next").addEventListener("click", () => {
@@ -113,15 +124,38 @@
       showSlide(index - 1);
     });
 
-    // Optional: Swipe support for mobile
+    // Swipe support for mobile
     let startY = 0;
-    document.addEventListener("touchstart", e => startY = e.touches[0].clientY);
+    document.addEventListener("touchstart", e => {
+      startY = e.touches[0].clientY;
+      showButtons();
+    });
     document.addEventListener("touchend", e => {
       let endY = e.changedTouches[0].clientY;
       if (startY - endY > 50) showSlide(index + 1); // swipe up
       if (endY - startY > 50) showSlide(index - 1); // swipe down
     });
+
+    // Show buttons on mouse move or tap
+    document.addEventListener("mousemove", showButtons);
+    document.addEventListener("touchstart", showButtons);
+
+    function showButtons() {
+      buttons.classList.remove("hidden");
+      resetButtonFade();
+    }
+
+    function resetButtonFade() {
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        buttons.classList.add("hidden");
+      }, 2000); // Hide after 2 seconds
+    }
+
+    // Initial fade-out timer
+    resetButtonFade();
   </script>
 
 </body>
 </html>
+

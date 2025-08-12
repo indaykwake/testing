@@ -15,7 +15,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: black; /* Fallback */
+      background-color: black;
     }
 
     .slider-container {
@@ -50,27 +50,36 @@
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      padding: 0 15px;
+      padding: 0 20px;
     }
 
     .buttons button {
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
-      padding: 15px 20px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      font-size: 2.5rem;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
     .buttons button:hover {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0, 0, 0, 0.85);
+      transform: scale(1.1);
     }
 
     /* Responsive Adjustments */
     @media (max-width: 768px) {
       .buttons button {
-        padding: 10px 15px;
-        font-size: 1.5rem;
+        width: 55px;
+        height: 55px;
+        font-size: 2rem;
       }
     }
   </style>
@@ -87,8 +96,8 @@
     </div>
 
     <div class="buttons">
-      <button id="prev">&lt;</button>
-      <button id="next">&gt;</button>
+      <button id="prev">&#8249;</button>
+      <button id="next">&#8250;</button>
     </div>
   </div>
 

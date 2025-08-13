@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Vertical Image Slider with Auto-Hide Buttons</title>
+  <title>Fullscreen Horizontal Image Slider with Auto-Hide Buttons</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,13 +27,13 @@
     .slider {
       height: 100%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* Horizontal layout */
       transition: transform 0.6s ease-in-out;
     }
 
     .slider img {
-      width: 100%;
-      height: 100vh;
+      width: 100vw; /* Full screen width */
+      height: 100vh; /* Full screen height */
       object-fit: cover;
       display: block;
     }
@@ -41,17 +41,17 @@
     /* Buttons container */
     .buttons {
       position: absolute;
-      left: 50%;
-      top: 0;
-      height: 100%;
+      top: 50%;
+      left: 0;
       width: 100%;
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
-      transform: translateX(-50%);
+      align-items: center;
+      transform: translateY(-50%);
       pointer-events: none;
       opacity: 1;
       transition: opacity 0.5s ease;
+      padding: 0 0.5cm; /* Space from edge */
     }
 
     /* Hidden state for fade-out */
@@ -64,11 +64,10 @@
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
-      padding: 20px 25px;
+      padding: 10px 12px; /* smaller size */
       cursor: pointer;
-      font-size: 2rem;
+      font-size: 1.3rem;
       border-radius: 50%;
-      margin: 10px auto;
       transition: background-color 0.3s ease;
     }
 
@@ -78,8 +77,8 @@
 
     @media (max-width: 768px) {
       .buttons button {
-        padding: 15px 18px;
-        font-size: 1.5rem;
+        padding: 8px 10px;
+        font-size: 1.1rem;
       }
     }
   </style>
@@ -97,8 +96,8 @@
     </div>
 
     <div class="buttons" id="buttons">
-      <button id="prev">&#9650;</button> <!-- Up arrow -->
-      <button id="next">&#9660;</button> <!-- Down arrow -->
+      <button id="prev">&#9664;</button> <!-- Left arrow -->
+      <button id="next">&#9654;</button> <!-- Right arrow -->
     </div>
   </div>
 
@@ -113,7 +112,7 @@
       if (i < 0) i = slides.length - 1;
       if (i >= slides.length) i = 0;
       index = i;
-      slider.style.transform = `translateY(-${index * 100}vh)`;
+      slider.style.transform = `translateX(-${index * 100}vw)`; // Horizontal movement
       resetButtonFade();
     }
 
@@ -126,15 +125,15 @@
     });
 
     // Swipe support for mobile
-    let startY = 0;
+    let startX = 0;
     document.addEventListener("touchstart", e => {
-      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
       showButtons();
     });
     document.addEventListener("touchend", e => {
-      let endY = e.changedTouches[0].clientY;
-      if (startY - endY > 50) showSlide(index + 1); // swipe up
-      if (endY - startY > 50) showSlide(index - 1); // swipe down
+      let endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) showSlide(index + 1); // swipe left
+      if (endX - startX > 50) showSlide(index - 1); // swipe right
     });
 
     // Show buttons on mouse move or tap
@@ -159,3 +158,4 @@
 
 </body>
 </html>
+

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fullscreen Horizontal Image Slider with Auto-Hide Buttons</title>
+  <title>Fullscreen Horizontal Image Slider (Responsive)</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,18 +27,19 @@
     .slider {
       height: 100%;
       display: flex;
-      flex-direction: row; /* Horizontal layout */
+      flex-direction: row;
       transition: transform 0.6s ease-in-out;
     }
 
     .slider img {
-      width: 100vw; /* Full screen width */
-      height: 100vh; /* Full screen height */
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
+      object-position: center; /* ✅ Keeps image centered */
       display: block;
     }
 
-    /* Buttons container */
+    /* Buttons */
     .buttons {
       position: absolute;
       top: 50%;
@@ -51,10 +52,9 @@
       pointer-events: none;
       opacity: 1;
       transition: opacity 0.5s ease;
-      padding: 0 0.5cm; /* Space from edge */
+      padding: 0 0.5cm;
     }
 
-    /* Hidden state for fade-out */
     .buttons.hidden {
       opacity: 0;
     }
@@ -64,7 +64,7 @@
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
-      padding: 10px 12px; /* smaller size */
+      padding: 10px 12px;
       cursor: pointer;
       font-size: 1.3rem;
       border-radius: 50%;
@@ -75,10 +75,24 @@
       background-color: rgba(0, 0, 0, 0.8);
     }
 
-    @media (max-width: 768px) {
+    /* ✅ Mobile and tablet responsiveness */
+    @media (max-width: 1024px) {
+      .slider img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Prevents cropping faces */
+        background-color: black; /* Keeps letterboxing clean */
+      }
+
       .buttons button {
         padding: 8px 10px;
         font-size: 1.1rem;
+      }
+    }
+
+    @media (orientation: portrait) {
+      .slider img {
+        object-fit: contain; /* Better for portrait screens */
       }
     }
   </style>
@@ -98,8 +112,8 @@
     </div>
 
     <div class="buttons" id="buttons">
-      <button id="prev">&#9664;</button> <!-- Left arrow -->
-      <button id="next">&#9654;</button> <!-- Right arrow -->
+      <button id="prev">&#9664;</button>
+      <button id="next">&#9654;</button>
     </div>
   </div>
 
@@ -114,19 +128,14 @@
       if (i < 0) i = slides.length - 1;
       if (i >= slides.length) i = 0;
       index = i;
-      slider.style.transform = `translateX(-${index * 100}vw)`; // Horizontal movement
+      slider.style.transform = `translateX(-${index * 100}vw)`;
       resetButtonFade();
     }
 
-    document.getElementById("next").addEventListener("click", () => {
-      showSlide(index + 1);
-    });
+    document.getElementById("next").addEventListener("click", () => showSlide(index + 1));
+    document.getElementById("prev").addEventListener("click", () => showSlide(index - 1));
 
-    document.getElementById("prev").addEventListener("click", () => {
-      showSlide(index - 1);
-    });
-
-    // Swipe support for mobile
+    // Swipe for mobile
     let startX = 0;
     document.addEventListener("touchstart", e => {
       startX = e.touches[0].clientX;
@@ -134,11 +143,11 @@
     });
     document.addEventListener("touchend", e => {
       let endX = e.changedTouches[0].clientX;
-      if (startX - endX > 50) showSlide(index + 1); // swipe left
-      if (endX - startX > 50) showSlide(index - 1); // swipe right
+      if (startX - endX > 50) showSlide(index + 1);
+      if (endX - startX > 50) showSlide(index - 1);
     });
 
-    // Show buttons on mouse move or tap
+    // Auto-hide buttons
     document.addEventListener("mousemove", showButtons);
     document.addEventListener("touchstart", showButtons);
 
@@ -149,12 +158,9 @@
 
     function resetButtonFade() {
       clearTimeout(hideTimeout);
-      hideTimeout = setTimeout(() => {
-        buttons.classList.add("hidden");
-      }, 2000); // Hide after 2 seconds
+      hideTimeout = setTimeout(() => buttons.classList.add("hidden"), 2000);
     }
 
-    // Initial fade-out timer
     resetButtonFade();
   </script>
 

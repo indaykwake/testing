@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1600x750 Horizontal Image Slider</title>
+  <title>Fullscreen Horizontal Image Slider with Auto-Hide Buttons</title>
   <style>
     * {
       box-sizing: border-box;
@@ -16,38 +16,29 @@
       height: 100%;
       overflow: hidden;
       background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     .slider-container {
-      position: relative;
       width: 100%;
-      max-width: 1600px;   /* ✅ match image width */
-      aspect-ratio: 32 / 15; /* ✅ match 1600x750 ratio */
-      overflow: hidden;
-      background-color: black;
+      height: 100%;
+      position: relative;
     }
 
     .slider {
-      display: flex;
-      transition: transform 0.6s ease-in-out;
-      width: 100%;
       height: 100%;
+      display: flex;
+      flex-direction: row; /* Horizontal layout */
+      transition: transform 0.6s ease-in-out;
     }
 
     .slider img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;   /* ✅ show entire image, no crop */
-      object-position: center;
-      flex-shrink: 0;
-      background-color: black; /* fills around image */
+      width: 100vw; /* Full screen width */
+      height: 100vh; /* Full screen height */
+      object-fit: cover;
       display: block;
     }
 
-    /* Buttons */
+    /* Buttons container */
     .buttons {
       position: absolute;
       top: 50%;
@@ -60,9 +51,10 @@
       pointer-events: none;
       opacity: 1;
       transition: opacity 0.5s ease;
-      padding: 0 0.5cm;
+      padding: 0 0.5cm; /* Space from edge */
     }
 
+    /* Hidden state for fade-out */
     .buttons.hidden {
       opacity: 0;
     }
@@ -72,7 +64,7 @@
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
-      padding: 10px 12px;
+      padding: 10px 12px; /* smaller size */
       cursor: pointer;
       font-size: 1.3rem;
       border-radius: 50%;
@@ -83,23 +75,10 @@
       background-color: rgba(0, 0, 0, 0.8);
     }
 
-    /* ✅ Responsive adjustments */
-    @media (max-width: 1024px) {
-      .slider-container {
-        max-width: 100%;
-        height: auto;
-        aspect-ratio: 32 / 15;
-      }
-
+    @media (max-width: 768px) {
       .buttons button {
         padding: 8px 10px;
         font-size: 1.1rem;
-      }
-    }
-
-    @media (orientation: portrait) {
-      .slider img {
-        object-fit: contain;
       }
     }
   </style>
@@ -116,8 +95,8 @@
     </div>
 
     <div class="buttons" id="buttons">
-      <button id="prev">&#9664;</button>
-      <button id="next">&#9654;</button>
+      <button id="prev">&#9664;</button> <!-- Left arrow -->
+      <button id="next">&#9654;</button> <!-- Right arrow -->
     </div>
   </div>
 
@@ -132,14 +111,19 @@
       if (i < 0) i = slides.length - 1;
       if (i >= slides.length) i = 0;
       index = i;
-      slider.style.transform = `translateX(-${index * 100}%)`; // ✅ percentage-based, flexible
+      slider.style.transform = `translateX(-${index * 100}vw)`; // Horizontal movement
       resetButtonFade();
     }
 
-    document.getElementById("next").addEventListener("click", () => showSlide(index + 1));
-    document.getElementById("prev").addEventListener("click", () => showSlide(index - 1));
+    document.getElementById("next").addEventListener("click", () => {
+      showSlide(index + 1);
+    });
 
-    // Swipe for mobile
+    document.getElementById("prev").addEventListener("click", () => {
+      showSlide(index - 1);
+    });
+
+    // Swipe support for mobile
     let startX = 0;
     document.addEventListener("touchstart", e => {
       startX = e.touches[0].clientX;
@@ -147,11 +131,11 @@
     });
     document.addEventListener("touchend", e => {
       let endX = e.changedTouches[0].clientX;
-      if (startX - endX > 50) showSlide(index + 1);
-      if (endX - startX > 50) showSlide(index - 1);
+      if (startX - endX > 50) showSlide(index + 1); // swipe left
+      if (endX - startX > 50) showSlide(index - 1); // swipe right
     });
 
-    // Auto-hide buttons
+    // Show buttons on mouse move or tap
     document.addEventListener("mousemove", showButtons);
     document.addEventListener("touchstart", showButtons);
 
@@ -162,12 +146,16 @@
 
     function resetButtonFade() {
       clearTimeout(hideTimeout);
-      hideTimeout = setTimeout(() => buttons.classList.add("hidden"), 2000);
+      hideTimeout = setTimeout(() => {
+        buttons.classList.add("hidden");
+      }, 2000); // Hide after 2 seconds
     }
 
+    // Initial fade-out timer
     resetButtonFade();
   </script>
 
 </body>
 </html>
+
 
